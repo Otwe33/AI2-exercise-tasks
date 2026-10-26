@@ -21,6 +21,18 @@ import torch
 #
 # Step 4: Print x.grad (use .item()) — this holds the computed gradient.
 
+x = torch.tensor(4.0, requires_grad=True)
+y = 3 * x**3 - 2 * x**2 + x
+y.backward()
+
+print("Task 1:")
+print(f"  x = {x.item()}")
+print(f"  y = {y.item()}")
+print(f"  x.grad (dy/dx) = {x.grad.item()}")
+ 
+
+
+
 
 # ===========================================================================
 # Task 2: Manual Gradient Verification
@@ -45,6 +57,13 @@ import torch
 #
 # Answer:
 
+print("\nTask 2:")
+manual_grad = 9 * (4.0**2) - 4 * 4.0 + 1
+print(f"  Manual gradient: {manual_grad}")
+print(f"  Autograd result: {x.grad.item()}")
+print(f"  Match: {manual_grad == x.grad.item()}")
+
+
 
 # ===========================================================================
 # Task 3: Second Function — Full Verification
@@ -62,8 +81,19 @@ import torch
 #
 # Important: Each tensor can only have .backward() called once.
 # You need a fresh tensor for this task, not the one from Task 1.
-x2 = None
 
+x2 = torch.tensor(2.0, requires_grad=True)
+f = 5 * x2**2 - 4 * x2 + 7
+f.backward()
+
+manual_grad_2 = 10 * 2.0 - 4
+
+print("\nTask 3:")
+print(f"  x = {x2.item()}")
+print(f"  f(x) = {f.item()}")
+print(f"  Manual df/dx = {manual_grad_2}")
+print(f"  Autograd df/dx = {x2.grad.item()}")
+print(f"  Match: {manual_grad_2 == x2.grad.item()}")
 
 # ===========================================================================
 # Task 4: torch.no_grad()
@@ -81,7 +111,17 @@ y_no_grad = None
 # This demonstrates how no_grad() prevents gradient tracking.
 # You will use this during model evaluation in later exercises
 # to save memory and computation.
-z_with_grad = None
+
+x3 = torch.tensor(5.0, requires_grad=True)
+
+with torch.no_grad():
+    y_no_grad = x3 * 2
+
+z_with_grad = x3 * 2
+
+print("\nTask 4:")
+print(f"  Inside no_grad, y.requires_grad = {y_no_grad.requires_grad}")   # False
+print(f"  Outside no_grad, z.requires_grad = {z_with_grad.requires_grad}") # True
 
 
 # ===========================================================================
